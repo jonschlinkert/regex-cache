@@ -24,4 +24,3 @@ it('should use the cached regex to match:', function () {
   var matches = str.match(cached);
   matches[1].should.equal('abc');
 });
-
