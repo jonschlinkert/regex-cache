@@ -2,6 +2,7 @@
 
 > Memoize the results of a call to the RegExp constructor, avoiding repetitious runtime compilation of the same string and options, resulting in dramatic speed improvements.
 
+Read [what this does](#what-this-does).
 
 ## Install with [npm](npmjs.org)
 
@@ -11,20 +12,25 @@ npm i regex-cache --save
 
 ## Usage
 
-If the lib returns a function, you can wrap it like this:
+When a regex is created using the `new RegExp()` constructor and a function is returned, you can wrap the function like this:
 
 ```js
 var cache = require('regex-cache');
-var regex = cache(require('some-regex-lib'));
+var someRegex = cache(require('some-regex-lib'));
 ```
 
-Or, if the lib (or your own function) returns a regex, you can wrap it with a function first to achieve the same results.
+If the code you're wrapping returns a regex (e.g. not a function), wrap it first so it returns a function to achieve the same results. _(Note that **after wrapping the function with regex-cache** a regexp should be returned instead of a function)_.
 
-**Recommendations**
+### Recommendations
 
-* **do not** use this if you are passing options 
-* **do** use this if you are passing options and the logic to create the regex is extensive
-* **do** use this if you're not passing options and the lib returns a function (e.g. `re().test(str)`)
+**DO** use this when:
+
+* you're **not** passing options (regardless of how big or small the regex is, caching makes it faster)
+* you are passing options and the logic for creating the regex is extensive (like with globbing, brace expansion, etc)
+
+**DO NOT** use this when:
+
+* you are passing options to create a simple regex
 
 
 ### Example benchmarks
@@ -43,6 +49,7 @@ If you're using `new RegExp('foo')` instead of a regex literal, it's probably be
 regex-cache is a simple way to cache the results of a previous call to the RegExp constructor to avoid unnecessary runtime compilation when both the string and options being passed have not changed.
 
 Using the RegExp constructor offers a lot of flexibility, but the runtime compilation comes at a price - it's slow. Not specifically because of the call to the RegExp constructor, but because you have to build up the string to create the regex based on various inputs. 
+
 
 ## Run tests
 
