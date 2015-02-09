@@ -7,21 +7,35 @@
 
 'use strict';
 
-module.exports = function regexCache(fn, str, options) {
-  var regex;
-  if (str === null) { str = 'default'; }
+module.exports = function regexCache(fn, str, options, nocompare) {
+  var regex, cached;
+  if (arguments.length === 1) {
+    nocompare = true;
+    options = null;
+    str = null;
+  }
+
+  if (str === null) {
+    str = '__default';
+  }
+
   if (cache.hasOwnProperty(str)) {
-    var cached = cache[str];
-    if (equal(cached.opts, options)) {
+    cached = cache[str];
+    if (nocompare) {
       return cached.regex;
     }
 
-    regex = fn(str, options);
-    memo(str, options, regex);
-    return regex;
+    if (equal(cached.opts, options)) {
+      return cached.regex;
+    }
   }
 
-  regex = fn(str, options);
+  if (str === '__default') {
+    regex = fn(options);
+  } else {
+    regex = fn(str, options);
+  }
+
   memo(str, options, regex);
   return regex;
 };
@@ -50,13 +64,6 @@ function equal(a, b, mode) {
   if (!a && !b) { return true; }
   if (!!a && !b) { return false; }
   if (!a && !!b) { return false; }
-
-  // this is much faster than doiong `typeof`
-  // when you know you'll always be passing
-  // strings, like for regex flags etc.
-  if (mode === 'string') {
-    return a === b;
-  }
 
   var ak = Object.keys(a);
   var bk = Object.keys(b);
