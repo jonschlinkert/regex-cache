@@ -1,7 +1,7 @@
 {
   "name": "regex-cache",
   "description": "Memoize the results of a call to the RegExp constructor, avoiding repetitious runtime compilation of the same string and options, resulting in dramatic speed improvements.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "homepage": "https://github.com/jonschlinkert/regex-cache",
   "author": {
     "name": "Jon Schlinkert",
