@@ -1,6 +1,6 @@
 # regex-cache [![NPM version](https://badge.fury.io/js/regex-cache.svg)](http://badge.fury.io/js/regex-cache)  [![Build Status](https://travis-ci.org/jonschlinkert/regex-cache.svg)](https://travis-ci.org/jonschlinkert/regex-cache) 
 
-> Memoize the results of a call to the RegExp constructor. Whenever possible, avoiding repetitious runtime compilation of the same string and options can result in dramatic speed improvements.
+> Memoize the results of a call to the RegExp constructor, avoiding repetitious runtime compilation of the same string and options, resulting in dramatic speed improvements.
 
 
 ## Install with [npm](npmjs.org)
