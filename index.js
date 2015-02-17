@@ -7,6 +7,8 @@
 
 'use strict';
 
+var toKey = require('to-key');
+
 /**
  * Expose `regexCache`
  */
@@ -23,89 +25,28 @@ module.exports = regexCache;
  * @return {RegExp}
  */
 
-function regexCache(fn, str, options, nocompare) {
-  var regex, cached;
+function regexCache(fn, str, options) {
+  var key = '_default_';
 
-  // `str` might be explicitly defined as `null`
-  if (str === null || arguments.length === 1) {
-    str = '_default_';
-    nocompare = true;
-    options = null;
+  if (!str) {
+    return cache[key] || (cache[key] = fn());
   }
 
-  if (cache.hasOwnProperty(str)) {
-    cached = cache[str];
-    // return early without comparing options
-    if (nocompare) { return cached.regex; }
-
-    // otherwise, compare options first
-    if (equal(cached.opts, options)) {
-      return cached.regex;
+  if (!options) {
+    if (typeof str === 'string') {
+      return cache[str] || (cache[str] = fn(str));
+    } else {
+      key = toKey(str);
+      return cache[key] || (cache[key] = fn(str));
     }
   }
 
-  if (str === '_default_') {
-    regex = fn(options);
-  } else {
-    regex = fn(str, options);
-  }
-
-  memo(str, options, regex);
-  return regex;
-};
+  key = str + toKey(options);
+  return cache[key] || (cache[key] = fn(str, options));
+}
 
 /**
- * Cache a `str` with the given `opts` and
- * generated `regex`.
- *
- * @param  {String} `str`
- * @param  {Object} `opts`
- * @param  {RegExp} `regex`
+ * Expose `cache`
  */
-
-function memo(str, opts, regex) {
-  cache[str] = {regex: regex, opts: opts};
-}
 
 var cache = module.exports.cache = {};
-
-/**
- * Return false if object A is different (enough) from object B.
- *
- * When creating the regex, memoization is used to increase
- * performance. This function tells us if options have changed
- * so we can generate a new regex instead of using the cached one.
- *
- * It seems like a lot of logic but in most cases this function
- * returns early.
- *
- * @param {Object} `a` cached options
- * @param {Object} `b` passed options
- * @return {Boolean}
- */
-
-function equal(a, b, mode) {
-  if (!a && !b) { return true; }
-  if (!!a && !b) { return false; }
-  if (!a && !!b) { return false; }
-
-  var ak = Object.keys(a);
-  var bk = Object.keys(b);
-  var alen = a.length;
-  var blen = b.length;
-
-  if (alen !== blen) {
-    return false;
-  }
-
-  if (alen === 0 && blen === 0) {
-    return true;
-  }
-
-  var aa = JSON.stringify(a);
-  var bb = JSON.stringify(b);
-  if (aa != bb) {
-    return false;
-  }
-  return true;
-}
