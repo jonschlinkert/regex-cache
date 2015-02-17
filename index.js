@@ -31,7 +31,6 @@ function regexCache(fn, str, options, nocompare) {
     str = '_default_';
     nocompare = true;
     options = null;
-    str = null;
   }
 
   if (cache.hasOwnProperty(str)) {
