@@ -25,24 +25,96 @@ module.exports = regexCache;
  * @return {RegExp}
  */
 
-function regexCache(fn, str, options) {
-  var key = '_default_';
+// function regexCache(fn, str, options) {
+//   var key = '_default_', regex;
 
-  if (!str) {
-    return cache[key] || (cache[key] = fn());
+//   if (!str) {
+//     if (cache[key]) {
+//       return cache[key].regex;
+//     }
+//     memo(key, null, (regex = fn()));
+//     return regex;
+//   }
+
+//   if (!options) {
+//     key = typeof str === 'string' ? str : key = toKey(str);
+
+//     if (cache[key]) {
+//       return cache[key].regex;
+//     }
+//     memo(key, null, (regex = fn(str)));
+//     return regex;
+//   }
+
+//   key = str + toKey(options);
+//   if (cache[key]) {
+//     return cache[key].regex;
+//   }
+
+//   memo(key, null, (regex = fn(str, options)));
+//   return regex;
+// }
+
+function regexCache(fn, str, opts) {
+  var key = '_default_', regex, cached;
+
+  if (!str && !opts) {
+    if (typeof fn !== 'function') {
+      return fn;
+    }
+    return basic[key] || (basic[key] = fn());
   }
 
-  if (!options) {
-    if (typeof str === 'string') {
-      return cache[str] || (cache[str] = fn(str));
-    } else {
-      key = toKey(str);
-      return cache[key] || (cache[key] = fn(str));
+  var isString = typeof str === 'string';
+  if (isString) {
+    key = str;
+  } else {
+    opts = str;
+  }
+
+  if (!opts) {
+    if (isString) {
+      return basic[key] || (basic[key] = fn(key));
+    }
+
+    // else, `str` is an object
+    // cached = cache[key];
+    // opts = str;
+
+    // if (cached && equal(cached.opts, opts)) {
+    //   return cached.regex;
+    // }
+
+    // memo(key, opts, (regex = fn(str)));
+    // return regex;
+  }
+
+  cached = cache[key];
+  if (cached && equal(cached.opts, opts)) {
+    return cached.regex;
+  }
+
+  memo(key, opts, (regex = fn(str, opts)));
+  return regex;
+}
+
+function memo(key, opts, regex) {
+  cache[key] = {regex: regex, opts: opts};
+}
+
+function equal(a, b) {
+  for (var key in b) {
+    if (!a[key]) {
+      return false;
+    }
+    if (a[key] !== b[key]) {
+      return false;
+    }
+    if (typeof b[key] === 'object') {
+      return false;
     }
   }
-
-  key = str + toKey(options);
-  return cache[key] || (cache[key] = fn(str, options));
+  return true;
 }
 
 /**
@@ -50,3 +122,4 @@ function regexCache(fn, str, options) {
  */
 
 var cache = module.exports.cache = {};
+var basic = module.exports.basic = {};
