@@ -2,7 +2,8 @@
 
 > Memoize the results of a call to the RegExp constructor, avoiding repetitious runtime compilation of the same string and options, resulting in dramatic speed improvements.
 
-Read [what this does](#what-this-does).
+- Read [what this does](#what-this-does).
+- See [the benchmarks](#benchmarks)
 
 ## Install with [npm](npmjs.org)
 
@@ -48,7 +49,7 @@ var regex = cache(yourRegex);
 
 ### Example benchmarks
 
-[Performance results](#benchmarks) for a random regex lib, [mentions-regex], with and without regex-cache, and no options passed:
+[Performance results](#benchmarks) with and without regex-cache:
 
 ```bash
 # no args passed (defaults)
@@ -100,7 +101,16 @@ var regex = cache(yourRegex);
   without-cache x 2,228,281 ops/sec ±0.56% (99 runs sampled)
 ```
 
-## What it does
+## Run benchmarks
+
+Install dev dependencies:
+
+```bash
+npm i -d && npm run benchmarks
+```
+
+
+## What this does
 
 If you're using `new RegExp('foo')` instead of a regex literal, it's probably because you need to dyamically generate a regex based on user options or some other potentially changing factors. 
 
@@ -115,14 +125,6 @@ Install dev dependencies:
 
 ```bash
 npm i -d && npm test
-```
-
-## Run benchmarks
-
-Install dev dependencies:
-
-```bash
-npm i -d && npm run benchmarks
 ```
 
 ## Contributing
