@@ -49,7 +49,7 @@ var regex = cache(yourRegex);
 
 ### Example benchmarks
 
-[Performance results](#benchmarks) with and without regex-cache:
+Performance results, with and without regex-cache:
 
 ```bash
 # no args passed (defaults)
