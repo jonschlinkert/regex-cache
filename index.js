@@ -7,7 +7,8 @@
 
 'use strict';
 
-var toKey = require('to-key');
+var isPrimitive = require('is-primitive');
+var equal = require('is-equal-shallow');
 
 /**
  * Expose `regexCache`
@@ -25,36 +26,6 @@ module.exports = regexCache;
  * @return {RegExp}
  */
 
-// function regexCache(fn, str, options) {
-//   var key = '_default_', regex;
-
-//   if (!str) {
-//     if (cache[key]) {
-//       return cache[key].regex;
-//     }
-//     memo(key, null, (regex = fn()));
-//     return regex;
-//   }
-
-//   if (!options) {
-//     key = typeof str === 'string' ? str : key = toKey(str);
-
-//     if (cache[key]) {
-//       return cache[key].regex;
-//     }
-//     memo(key, null, (regex = fn(str)));
-//     return regex;
-//   }
-
-//   key = str + toKey(options);
-//   if (cache[key]) {
-//     return cache[key].regex;
-//   }
-
-//   memo(key, null, (regex = fn(str, options)));
-//   return regex;
-// }
-
 function regexCache(fn, str, opts) {
   var key = '_default_', regex, cached;
 
@@ -67,26 +38,12 @@ function regexCache(fn, str, opts) {
 
   var isString = typeof str === 'string';
   if (isString) {
+    if (!opts) {
+      return basic[str] || (basic[str] = fn(str));
+    }
     key = str;
   } else {
     opts = str;
-  }
-
-  if (!opts) {
-    if (isString) {
-      return basic[key] || (basic[key] = fn(key));
-    }
-
-    // else, `str` is an object
-    // cached = cache[key];
-    // opts = str;
-
-    // if (cached && equal(cached.opts, opts)) {
-    //   return cached.regex;
-    // }
-
-    // memo(key, opts, (regex = fn(str)));
-    // return regex;
   }
 
   cached = cache[key];
@@ -100,21 +57,6 @@ function regexCache(fn, str, opts) {
 
 function memo(key, opts, regex) {
   cache[key] = {regex: regex, opts: opts};
-}
-
-function equal(a, b) {
-  for (var key in b) {
-    if (!a[key]) {
-      return false;
-    }
-    if (a[key] !== b[key]) {
-      return false;
-    }
-    if (typeof b[key] === 'object') {
-      return false;
-    }
-  }
-  return true;
 }
 
 /**
