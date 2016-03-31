@@ -33,7 +33,7 @@ function regexCache(fn, str, opts) {
     if (typeof fn !== 'function') {
       return fn;
     }
-    return basic[key] || (basic[key] = fn());
+    return basic[key] || (basic[key] = fn(str));
   }
 
   var isString = typeof str === 'string';
