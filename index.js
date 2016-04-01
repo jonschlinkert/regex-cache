@@ -9,6 +9,8 @@
 
 var isPrimitive = require('is-primitive');
 var equal = require('is-equal-shallow');
+var basic = {};
+var cache = {};
 
 /**
  * Expose `regexCache`
@@ -63,5 +65,5 @@ function memo(key, opts, regex) {
  * Expose `cache`
  */
 
-var cache = module.exports.cache = {};
-var basic = module.exports.basic = {};
+module.exports.cache = cache;
+module.exports.basic = basic;

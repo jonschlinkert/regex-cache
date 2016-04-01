@@ -34,7 +34,6 @@ exports.toRegex = function toRegex(str, opts) {
   if (opts.y) re += 'y';
   if (opts.z) re += 'z';
 
-
   var f = opts.flags || '';
   re = re
     ? '(' + re + ')'
