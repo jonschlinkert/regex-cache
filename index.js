@@ -7,7 +7,6 @@
 
 'use strict';
 
-var isPrimitive = require('is-primitive');
 var equal = require('is-equal-shallow');
 var basic = {};
 var cache = {};
