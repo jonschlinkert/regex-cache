@@ -4,6 +4,10 @@
   "version": "0.4.3",
   "homepage": "https://github.com/jonschlinkert/regex-cache",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "contributors": [
+    "Jon Schlinkert (http://twitter.com/jonschlinkert)",
+    "Martin Kolárik (https://kolarik.sk)"
+  ],
   "repository": "jonschlinkert/regex-cache",
   "bugs": {
     "url": "https://github.com/jonschlinkert/regex-cache/issues"
