@@ -1,9 +1,9 @@
 'use strict';
 
 var fs = require('fs');
-var chalk = require('chalk');
 var path = require('path');
 var mm = require('micromatch');
+var bold = require('ansi-bold');
 
 /**
  * Sanity check. run to ensure that all fns return a correct
@@ -18,7 +18,7 @@ fs.readdirSync(__dirname + '/code').forEach(function (fp) {
     fs.readdirSync(__dirname + '/fixtures').forEach(function (fixture) {
       if (mm.isMatch(fixture, '*.js')) {
         fixture = path.resolve(__dirname, 'fixtures', fixture);
-        console.log(chalk.bold(name) + ':', fn.apply(null, require(fixture)));
+        console.log(bold(name) + ':', fn.apply(null, require(fixture)));
       }
     });
   }
